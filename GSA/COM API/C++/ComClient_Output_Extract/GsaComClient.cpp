@@ -163,7 +163,7 @@ void CGsaComClientApp::invokeGsa(CString filename, CString analysed_filename, CS
 		//CString comm = L"SET,OP_VIEW,\"[EL1DFRCAUTOPTS,STRIPEYOUTPUT,REFSBYNAME,INTRESONTRUSS,FULLPOPFIELDS]\",0,viewFromCOM,128,128,1607,821,1,9,1,4,1,-4,1,1,-4,2,1,-4,3,1,-4,11,1,-4,1,10004000,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,-Infinity,Infinity,0,1,4,2,4,1e-12,1,3,0,2";
 		//pObj->GwaCommand((LPCTSTR)comm);
 
-		//CUSTOM OP 10.2.1.32 works!!!
+		//CUSTOM OP 10.2.3.49 works!!!
 		CString comm(L"SET,CUSTOM_OP_VIEW,[FULLPOPFIELDS],1,Node,\"[CUSTOMOUTPUT:DISP_DY;DISP_DX;]\",nodesCOM,0,0,0,0,0,0,0,4,2,-46,1,1,3,1,-1,10,0,0,0,0,0,0,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,0,0,0,1,4,2,4,1e-12,0,0,0,0");
 		pObj->GwaCommand((LPCTSTR)comm);
 		
