@@ -86,48 +86,30 @@ BOOL CGsaComClientApp::InitInstance()
 	//  application, rather than start the application's message pump.
 	return FALSE;
 }
-
-int SaveDefaultOutputView(IComAutoPtr& pObj)
+int NewMethods(IComAutoPtr& pObj)
 {
-	CString file_type = L"HTML";
+	_bstr_t op = "nodesCOM";
+	return pObj->SaveViewToFile(op, "CSV");
 
-	// default op
-	CString option = L"VARADA via com2"; // VIEW NAME
-	pObj->GwaCommand("SET, OP_VIEW.6,\"[EL1DFRCAUTOPTS, STRIPEYOUTPUT, REFSBYNAME, INTRESONTRUSS, FULLPOPFIELDS, ]\"	0	VARADA via com2	128	128	1607	821	1	9	1	4	1	-4	1	1	-4	2	1	-4	3	1	-4	11	1	-4	1	10004000	0	-10	N	1	m	1	kg	1	s	1	°C	1	m	1	Pa	1	m/s²	1	m	1	-Infinity	Infinity	0	1	4	2	4	1e-12	1	3	0	2");
-	//CString node_comm = L"SET, NODE, 25, 10, 4.5, 8";
-	//pObj->GwaCommand((LPCTSTR)node_comm);
+	// Other methods
+	//auto max = pObj->HighestView(op);
+	//*/
 
-	// custom op
-	//CString headers = L"\"[FULLPOPFIELDS,CUSTOMOUTPUT:FORCE_MEMB_MZZ;FORCE_MEMB_MYY;FORCE_MEMB_FX;]\"";
-	//CString strdata(",CustomOp from COM2,0,0,0,0,0,0,0,4,1,1,0,0,0,0,3,3,1,-1,25,0,0,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,0,0,0,1,4,2,4,1e-12,0,0,0,0");
-	//CString command = (L"SET,CUSTOM_OP_VIEW," + headers + strdata);
+	/*BSTR op = L"COV";
+	long place_holder = 0;
+	long* nw_vw_id = &place_holder;
 
-	//CString alter_command = L"[FULLPOPFIELDS]	1	1D member	\"[CUSTOMOUTPUT:ENTITY_CASE_EXPANSION; ]\"	CustomOpCOM	0	0	0	0	0	0	0	4	1	-4	0	0	0	0	3	1	-4	0	0	0	-10	N	1	m	1	kg	1	s	1	°C	1	m	1	Pa	1	m/s²	1	m	1	0	0	0	1	4	2	4	1e-12	0	0	0	0";
-	//alter_command = L"ADD,CUSTOM_OP_VIEW," + alter_command;
+	//auto ret = pObj->CopyView(op, 1, nw_vw_id); 
+//max = pObj->HighestView(op); // updated highest view
 
-
-
-	//CString headers = L"\"[FULLPOPFIELDS,CUSTOMOUTPUT:FORCE_MEMB_MZZ;FORCE_MEMB_MYY;FORCE_MEMB_FX;]\"";
-	//CString strdata(",CustomOp from COM,0,0,0,0,0,0,0,4,1,1,0,0,0,0,3,3,1,-1,25,0,0,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,0,0,0,1,4,2,4,1e-12,0,0,0,0");
-	//CString command = L"SET,CUSTOM_OP_VIEW," + headers + strdata;
-
-	//CString command = L"SET, CUSTOM_OP_VIEW.7	7	[FULLPOPFIELDS]	1	1D member	\"[CUSTOMOUTPUT:MEMB_NAME;MEMB_TYPE;]\"	test	0	0	0	0	0	0	0	4	2	-46	1	0	0	0	0	3	3	1	-1	10	0	0	0	-10	N	1	m	1	kg	1	s	1	°C	1	m	1	Pa	1	m/s²	1	m	1	0	0	0	1	4	2	4	1e-12	0	0	0	0";
-
-	//pObj->GwaCommand((LPCTSTR)command);
-
-	// gsa10.2.2.33 version
-	//CString headers = L"\"[FULLPOPFIELDS, CUSTOMOUTPUT:MEMB_TYPE; MEMB_NAME; DISP_MEMB_DY; ]\"	viaCOM	0	0	0	0	0	0	0	4	2	-46	1	0	0	0	0	3	3	1	-1	10	0	0	0	-10	N	1	m	1	kg	1	s	1	°C	1	m	1	Pa	1	m/s²	1	m	1	0	0	0	1	4	2	4	1e-12	0	0	0	0";
-	//CString comm = (L"SET,CUSTOM_OP_VIEW," + headers);
-	//pObj->GwaCommand((LPCTSTR)comm);
-
-
-	//UNREFERENCED_PARAMETER(RET);
-	//CString option = L"testerCOM"; // VIEW NAME
-	//CString option = L"testerCOM";
-	//save to gwb file
-	//return (pObj->SaveViewToFile((LPCTSTR)option, (LPCTSTR)file_type)); // adds a new view
-	return 0;
-
+//ret = pObj->RenameView(op, 2, BSTR("renamedCOM"));
+//ret=pObj->DeleteView(op, 3);
+//BSTR* caselist = new BSTR();
+//pObj->GetViewCaseList(op, 1, caselist);
+//auto name = pObj->ViewName(op, 2);
+//auto iref = pObj->ViewRefFromName(op, BSTR("nodesCOM"));
+	/*_bstr_t nam = "nodesCOM";
+	pObj->PrintView(nam);*/
 }
 void CGsaComClientApp::invokeGsa(CString filename, CString analysed_filename, CString analysed_filename_report)
 {
@@ -154,26 +136,14 @@ void CGsaComClientApp::invokeGsa(CString filename, CString analysed_filename, CS
 	{
 		theFile.Open(analysed_filename_report, CFile::modeCreate | CFile::modeWrite);
 
-		//NODES-NOT WORKING
-		//CString node_comm = L"ADD, LOAD_BEAM, 1 to 10, 10, GLOBAL, NO, Z, -1000";
-		//pObj->GwaCommand((LPCTSTR)node_comm);
 
-
-		// default 10.2.3.49 works!!!!
-		//CString comm = L"SET,OP_VIEW,\"[EL1DFRCAUTOPTS,STRIPEYOUTPUT,REFSBYNAME,INTRESONTRUSS,FULLPOPFIELDS]\",0,viewFromCOM,128,128,1607,821,1,9,1,4,1,-4,1,1,-4,2,1,-4,3,1,-4,11,1,-4,1,10004000,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,-Infinity,Infinity,0,1,4,2,4,1e-12,1,3,0,2";
-		//pObj->GwaCommand((LPCTSTR)comm);
-
-		//CUSTOM OP 10.2.3.49 works!!!
-		CString comm(L"SET,CUSTOM_OP_VIEW,[FULLPOPFIELDS],1,Node,\"[CUSTOMOUTPUT:DISP_DY;DISP_DX;]\",nodesCOM,0,0,0,0,0,0,0,4,2,-46,1,1,3,1,-1,10,0,0,0,0,0,0,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,0,0,0,1,4,2,4,1e-12,0,0,0,0");
-		pObj->GwaCommand((LPCTSTR)comm);
-		
+		auto res = NewMethods(pObj);
 		theFile.Close();
 	}
 	catch (...)
 	{
 		theFile.Abort();
 	}
-	analysed_filename.Replace(L".gwb", L".gwa");
 	_bstr_t bsAnalysedFileName = (LPCTSTR)analysed_filename;
 	ret_code = pObj->SaveAs(bsAnalysedFileName);
 	ASSERT(ret_code == 0);
@@ -187,3 +157,20 @@ void CGsaComClientApp::WriteString(CFile& cfile, CString str)
 	cfile.Write((LPCTSTR)cstr, cstr.GetLength() * sizeof(TCHAR));
 }
 
+void WorkingGwaCommands()
+{
+
+	//NODES-NOT WORKING
+//CString node_comm = L"ADD, LOAD_BEAM, 1 to 10, 10, GLOBAL, NO, Z, -1000";
+//pObj->GwaCommand((LPCTSTR)node_comm);
+
+
+// default 10.2.3.49 works!!!!
+//CString comm = L"SET,OP_VIEW,\"[EL1DFRCAUTOPTS,STRIPEYOUTPUT,REFSBYNAME,INTRESONTRUSS,FULLPOPFIELDS]\",0,viewFromCOM,128,128,1607,821,1,9,1,4,1,-4,1,1,-4,2,1,-4,3,1,-4,11,1,-4,1,10004000,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,-Infinity,Infinity,0,1,4,2,4,1e-12,1,3,0,2";
+//pObj->GwaCommand((LPCTSTR)comm);
+
+//CUSTOM OP 10.2.3.49 works!!!
+//CString comm(L"SET,CUSTOM_OP_VIEW,[FULLPOPFIELDS],1,Node,\"[CUSTOMOUTPUT:DISP_DY;DISP_DX;]\",NodesComToUI,0,0,0,0,0,0,0,4,2,-46,1,1,3,1,-1,10,0,0,0,0,0,0,0,-10,N,1,m,1,kg,1,s,1,°C,1,m,1,Pa,1,m/s²,1,m,1,0,0,0,1,4,2,4,1e-12,0,0,0,0");
+//pObj->GwaCommand((LPCTSTR)comm);
+
+}
