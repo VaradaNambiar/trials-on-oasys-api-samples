@@ -1,4 +1,4 @@
-This file contains copy of original API sample. 
+This folder contains mutated copies of Oasys-API-samples for GSA COM API C++. 
 Main content i.e. crux include additional methods added in GsaComClient.cpp to test/check various COM functions extended to CUSTOM_OUTPUT. 
 Use ```gwb files\gsaCOMforCustomOutputs.gwb``` file to test the functions.
 
