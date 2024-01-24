@@ -9,10 +9,10 @@
 
 #include "GsaComClientDlg.h"
 #include <string>
-//#import "C:\\repo\\oasys-combined-main\\gsa\\programs64_d\\GSA.tlb" no_namespace
+#import "C:\\repo\\oasys-combined\\gsa\\programs64_d\\GSA.tlb" no_namespace
 // bring dlls from prog64 to below loc
 // opt 2 GsRegister will reg the dev (debug/release) into registry editor 
-#import "C:\\Program Files\\Oasys\\GSA 10.2\\Gsa.tlb" no_namespace
+//#import "C:\\Program Files\\Oasys\\GSA 10.2\\Gsa.tlb" no_namespace
 
 
 // replace the above with path to GSA.tlb in the program files folder
@@ -63,6 +63,7 @@ BOOL CGsaComClientApp::InitInstance()
 	CGsaComClientDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
+
 	if (nResponse == IDOK)
 	{
 		try
@@ -86,31 +87,85 @@ BOOL CGsaComClientApp::InitInstance()
 	//  application, rather than start the application's message pump.
 	return FALSE;
 }
-int NewMethods(IComAutoPtr& pObj)
+
+int CopyView(IComAutoPtr& pObj)
 {
-	_bstr_t op = "nodesCOM";
-	return pObj->SaveViewToFile(op, "CSV");
-
-	// Other methods
-	//auto max = pObj->HighestView(op);
-	//*/
-
-	/*BSTR op = L"COV";
+	BSTR op = L"CUSTOM_OUTPUT";
 	long place_holder = 0;
 	long* nw_vw_id = &place_holder;
 
-	//auto ret = pObj->CopyView(op, 1, nw_vw_id); 
-//max = pObj->HighestView(op); // updated highest view
+	auto ret = pObj->CopyView(op, 1, nw_vw_id); // copies view with ID 1 into highest viewID +1 
+	bool is_expected = false;
+	if (*nw_vw_id == 2) //
+	{
+		is_expected = true;
+	}
 
-//ret = pObj->RenameView(op, 2, BSTR("renamedCOM"));
-//ret=pObj->DeleteView(op, 3);
-//BSTR* caselist = new BSTR();
-//pObj->GetViewCaseList(op, 1, caselist);
-//auto name = pObj->ViewName(op, 2);
-//auto iref = pObj->ViewRefFromName(op, BSTR("nodesCOM"));
-	/*_bstr_t nam = "nodesCOM";
-	pObj->PrintView(nam);*/
+	if (ret == 0 && is_expected) // to see view 2 is same as view 1
+	{
+		_bstr_t get_cov_command = L"GET, CUSTOM_OP_VIEW, 2"; // name of new view will have random number appended to it 
+		auto result = pObj->GwaCommand(get_cov_command);
+
+	}
+
+	return ret;
 }
+
+int GetNumArgs(IComAutoPtr& pObj)
+{
+	int args_count = pObj->NumArg(L"SET,CUSTOM_OP_VIEW,[FULLPOPFIELDS],1,Node");
+	return args_count; // 5
+}
+
+int CheckPrintView(IComAutoPtr& pObj)
+{
+	_bstr_t nam = "custom_op_2"; // input name of custom/default output view
+	return pObj->PrintView(nam);
+}
+
+
+int CheckSaveToFile(IComAutoPtr& pObj) {
+	_bstr_t op = "ALL_CUSTOM_OUTPUT";
+	return pObj->SaveViewToFile(op, "CSV");
+}
+
+int CheckHighestView(IComAutoPtr& pObj)
+{
+	_bstr_t op = "CUSTOM_OUTPUT";
+	auto max = pObj->HighestView(op);
+	int expected = 1; // insert highest view expected from file
+	return max == expected;
+}
+
+int CheckRenameView(IComAutoPtr& pObj)
+{
+	_bstr_t op = "CUSTOM_OUTPUT";
+	_bstr_t new_name = "renamedCOM";
+	return pObj->RenameView(op, 1, new_name);
+}
+
+int CheckDeleteView(IComAutoPtr& pObj)
+{
+	_bstr_t op = "CUSTOM_OUTPUT";
+	return pObj->DeleteView(op, 2);
+}
+
+int CheckNewCaseList(IComAutoPtr& pObj)
+{
+	_bstr_t op = "CUSTOM_OUTPUT";
+	BSTR* caselist = new BSTR();
+	return pObj->GetViewCaseList(op, 1, caselist);
+}
+
+
+int CheckName(IComAutoPtr& pObj)
+{
+	_bstr_t op = "CUSTOM_OUTPUT";
+	auto name = pObj->ViewName(op, 2);
+	auto iref = pObj->ViewRefFromName(op, BSTR("custom_op_name")); // output name
+	return 0;
+}
+
 void CGsaComClientApp::invokeGsa(CString filename, CString analysed_filename, CString analysed_filename_report)
 {
 	if (FAILED(CoInitializeEx(0, COINIT_APARTMENTTHREADED)))
@@ -135,9 +190,9 @@ void CGsaComClientApp::invokeGsa(CString filename, CString analysed_filename, CS
 	try
 	{
 		theFile.Open(analysed_filename_report, CFile::modeCreate | CFile::modeWrite);
-
-
-		auto res = NewMethods(pObj);
+		auto res = CopyView(pObj); // call the method of interest
+		CheckRenameView(pObj); // rename first view
+		CheckDeleteView(pObj); // delete second view
 		theFile.Close();
 	}
 	catch (...)
@@ -174,3 +229,4 @@ void WorkingGwaCommands()
 //pObj->GwaCommand((LPCTSTR)comm);
 
 }
+
