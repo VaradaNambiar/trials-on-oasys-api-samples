@@ -1,7 +1,8 @@
 This file contains copy of original API sample. 
 Main content i.e. crux include additional methods added in GsaComClient.cpp to test/check various COM functions extended to CUSTOM_OUTPUT. 
+Use ```gwb files\gsaCOMforCustomOutputs.gwb``` file to test the functions.
 
-//----------------------------------------------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------------------------------------------------------//
 
 
 Contains a minimal C++ COM sample that demonstrates initialization of the COM object and model analysis.
